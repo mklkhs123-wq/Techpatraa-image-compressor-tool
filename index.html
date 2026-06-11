@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Pro Image Compressor Tool - TechPatraa</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    min-height:100vh;
+    padding:15px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
+
+.container{
+    width:100%;
+    max-width:860px;
+    padding:22px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff;
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+h2{font-size:20px;margin-bottom:16px;text-align:center;}
+
+/* Drop Box */
+.drop-box{
+    border:2px dashed #00e5ff;
+    padding:28px 15px;
+    border-radius:12px;
+    text-align:center;
+    cursor:pointer;
+    transition:background 0.2s;
+    -webkit-tap-highlight-color:transparent;
+}
+.drop-box:active{background:rgba(0,229,255,0.1);}
+.drop-box .icon{font-size:32px;display:block;margin-bottom:6px;}
+.drop-box small{color:rgba(255,255,255,0.6);font-size:13px;}
+
+/* Controls */
+.controls{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;}
+
+.ctrl-box{
+    flex:1;
+    min-width:200px;
+    background:rgba(255,255,255,0.06);
+    border-radius:12px;
+    padding:12px 14px;
+}
+.ctrl-box label{
+    display:block;
+    font-size:13px;
+    color:rgba(255,255,255,0.7);
+    margin-bottom:8px;
+}
+
+/* Slider */
+input[type=range]{
+    width:100%;
+    accent-color:#00e5ff;
+    cursor:pointer;
+    height:6px;
+}
+input[type=range]::-webkit-slider-thumb{
+    width:22px;height:22px;
+}
+.slider-val{
+    text-align:right;
+    font-size:13px;
+    font-weight:bold;
+    color:#00e5ff;
+    margin-top:5px;
+}
+
+/* Format select */
+select{
+    width:100%;
+    padding:10px;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.08);
+    color:#fff;
+    font-size:14px;
+    outline:none;
+    cursor:pointer;
+}
+select option{background:#1a2a3a;color:#fff;}
+
+/* Size row */
+.size-row{display:flex;align-items:center;gap:10px;margin-top:4px;}
+.size-row>div{flex:1;}
+.size-row input[type=number]{
+    width:100%;
+    padding:9px;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.08);
+    color:#fff;
+    text-align:center;
+    font-size:14px;
+    outline:none;
+}
+.size-row input[type=number]::placeholder{color:rgba(255,255,255,0.3);}
+.size-row small{display:block;text-align:center;font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.lock-icon{font-size:20px;text-align:center;color:rgba(255,255,255,0.35);padding-top:6px;}
+
+/* Compress button */
+.btn-compress{
+    display:block;
+    width:100%;
+    margin-top:18px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#00e5ff,#0077ff);
+    color:#fff;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity 0.2s;
+}
+.btn-compress:active{opacity:0.8;}
+
+/* Progress */
+.progress-box{display:none;margin-top:14px;}
+.progress-track{
+    background:rgba(255,255,255,0.12);
+    border-radius:20px;
+    height:12px;
+    overflow:hidden;
+}
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#00e5ff,#0077ff);
+    border-radius:20px;
+    transition:width 0.08s linear;
+}
+.status-text{
+    text-align:center;
+    margin-top:7px;
+    font-size:13px;
+    font-weight:bold;
+    color:#00e5ff;
+}
+
+/* Ad slot */
+.ad-slot{
+    margin-top:16px;
+    padding:10px 0;
+    text-align:center;
+    min-height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+/* Preview */
+.preview-section{display:none;margin-top:20px;}
+.preview-section h3{
+    font-size:15px;
+    color:rgba(255,255,255,0.7);
+    margin-bottom:12px;
+    text-align:center;
+}
+.preview-row{display:flex;gap:14px;flex-wrap:wrap;}
+.preview-card{
+    flex:1;
+    min-width:200px;
+    background:rgba(255,255,255,0.06);
+    border-radius:12px;
+    padding:12px;
+    text-align:center;
+}
+.preview-card p{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:8px;}
+.preview-card img{
+    width:100%;
+    border-radius:8px;
+    max-height:220px;
+    object-fit:contain;
+    background:rgba(0,0,0,0.2);
+    display:block;
+}
+.size-info{
+    margin-top:8px;
+    font-size:12px;
+    color:rgba(255,255,255,0.5);
+    line-height:1.7;
+}
+
+/* Download */
+.btn-download{
+    display:none;
+    width:100%;
+    margin-top:12px;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#00c853,#009624);
+    color:#fff;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity 0.2s;
+}
+.btn-download:active{opacity:0.8;}
+
+@media(max-width:580px){
+    .container{padding:12px;}
+    .ctrl-box{min-width:100%;}
+    .preview-row{flex-direction:column;}
+    .preview-card{min-width:100%;}
+    h2{font-size:17px;}
+    .btn-compress{font-size:14px;padding:13px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <h2>🚀 Pro Image Compressor Studio</h2>
+
+    <!-- Upload -->
+    <div class="drop-box" id="dropBox">
+        <span class="icon">📂</span>
+        <strong>Tap / Click to Upload Image</strong>
+        <br><small>Supports JPG, PNG, WebP</small>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" style="display:none">
+
+    <!-- Controls -->
+    <div class="controls">
+
+        <div class="ctrl-box">
+            <label>Quality — <span id="qualityVal" style="color:#00e5ff;font-weight:bold;">70%</span></label>
+            <input type="range" id="qualitySlider" min="10" max="100" value="70">
+        </div>
+
+        <div class="ctrl-box">
+            <label>Output Format</label>
+            <select id="formatSelect">
+                <option value="image/jpeg">JPG</option>
+                <option value="image/png">PNG</option>
+                <option value="image/webp">WEBP</option>
+            </select>
+        </div>
+
+        <div class="ctrl-box">
+            <label>Resize (px) — optional</label>
+            <div class="size-row">
+                <div>
+                    <input type="number" id="widthInput" placeholder="Width">
+                    <small>Width</small>
+                </div>
+                <div class="lock-icon">🔗</div>
+                <div>
+                    <input type="number" id="heightInput" placeholder="Height">
+                    <small>Height</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Compress button -->
+    <button class="btn-compress" onclick="compressImage()">⚡ Compress Image</button>
+
+    <!-- Progress -->
+    <div class="progress-box" id="progressBox">
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="status-text" id="statusText">Processing 0%</p>
+    </div>
+
+    <!-- Ad Slot -->
+    <div class="ad-slot">
+        <script>
+          atOptions = {
+            'key' : '40481fbfeb3ccbe3f4d81eba78ba36e8',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/40481fbfeb3ccbe3f4d81eba78ba36e8/invoke.js"></script>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-section" id="previewSection">
+        <h3>📸 Before / After</h3>
+        <div class="preview-row">
+
+            <div class="preview-card">
+                <p>Original</p>
+                <img id="originalImg" src="" alt="original">
+                <div class="size-info" id="origInfo"></div>
+            </div>
+
+            <div class="preview-card">
+                <p>Compressed</p>
+                <img id="compressedImg" src="" alt="compressed">
+                <div class="size-info" id="compInfo"></div>
+                <button class="btn-download" id="downloadBtn" onclick="downloadImage()">⬇️ Download Image</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<canvas id="canvas" style="display:none"></canvas>
+
+<script>
+let uploadedFile = null;
+let loadedImage  = null;
+let compressedDataUrl = null;
+
+const fileInput      = document.getElementById("fileInput");
+const dropBox        = document.getElementById("dropBox");
+const qualitySlider  = document.getElementById("qualitySlider");
+const qualityVal     = document.getElementById("qualityVal");
+const formatSelect   = document.getElementById("formatSelect");
+const widthInput     = document.getElementById("widthInput");
+const heightInput    = document.getElementById("heightInput");
+const progressBox    = document.getElementById("progressBox");
+const progressFill   = document.getElementById("progressFill");
+const statusText     = document.getElementById("statusText");
+const previewSection = document.getElementById("previewSection");
+const originalImg    = document.getElementById("originalImg");
+const compressedImg  = document.getElementById("compressedImg");
+const origInfo       = document.getElementById("origInfo");
+const compInfo       = document.getElementById("compInfo");
+const downloadBtn    = document.getElementById("downloadBtn");
+const canvas         = document.getElementById("canvas");
+const ctx            = canvas.getContext("2d");
+
+// Upload
+dropBox.addEventListener("click", () => fileInput.click());
+dropBox.addEventListener("touchend", e => { e.preventDefault(); fileInput.click(); });
+
+// Quality slider
+qualitySlider.addEventListener("input", () => {
+    qualityVal.textContent = qualitySlider.value + "%";
+});
+
+// Aspect ratio lock
+widthInput.addEventListener("input", () => {
+    if (loadedImage && widthInput.value) {
+        heightInput.value = Math.round(widthInput.value * (loadedImage.height / loadedImage.width));
+    }
+});
+heightInput.addEventListener("input", () => {
+    if (loadedImage && heightInput.value) {
+        widthInput.value = Math.round(heightInput.value * (loadedImage.width / loadedImage.height));
+    }
+});
+
+// File selected
+fileInput.addEventListener("change", function(e) {
+    const f = e.target.files[0];
+    if (!f) return;
+    uploadedFile = f;
+
+    compressedImg.src = "";
+    downloadBtn.style.display = "none";
+    progressBox.style.display = "none";
+    compInfo.textContent = "";
+    compressedDataUrl = null;
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        loadedImage = new Image();
+        loadedImage.onload = function() {
+            originalImg.src = ev.target.result;
+            widthInput.placeholder  = loadedImage.width;
+            heightInput.placeholder = loadedImage.height;
+            origInfo.innerHTML = `${loadedImage.width} × ${loadedImage.height} px &nbsp;|&nbsp; ${(f.size/1024).toFixed(1)} KB`;
+            previewSection.style.display = "block";
+        };
+        loadedImage.src = ev.target.result;
+    };
+    reader.readAsDataURL(f);
+});
+
+function compressImage() {
+    if (!uploadedFile || !loadedImage) {
+        alert("Pehle image upload karein! 📂");
+        return;
+    }
+
+    // Reset
+    compressedImg.src = "";
+    downloadBtn.style.display = "none";
+    compInfo.textContent = "";
+    compressedDataUrl = null;
+    progressBox.style.display = "block";
+    progressFill.style.width = "0%";
+    statusText.textContent = "Processing 0%";
+
+    const quality  = qualitySlider.value / 100;
+    const format   = formatSelect.value;
+    const targetW  = parseInt(widthInput.value)  || loadedImage.width;
+    const targetH  = parseInt(heightInput.value) || loadedImage.height;
+
+    // Progress animation 0→85
+    let prog = 0;
+    const timer = setInterval(() => {
+        prog += 5;
+        if (prog > 85) { clearInterval(timer); return; }
+        progressFill.style.width = prog + "%";
+        statusText.textContent = "Processing " + prog + "%";
+    }, 40);
+
+    setTimeout(() => {
+        canvas.width  = targetW;
+        canvas.height = targetH;
+        ctx.clearRect(0, 0, targetW, targetH);
+        ctx.drawImage(loadedImage, 0, 0, targetW, targetH);
+
+        compressedDataUrl = canvas.toDataURL(format, quality);
+
+        clearInterval(timer);
+        progressFill.style.width = "100%";
+        statusText.textContent = "✅ Compression Done!";
+
+        compressedImg.src = compressedDataUrl;
+
+        const bytes   = Math.round((compressedDataUrl.length * 3) / 4);
+        const sizeKB  = (bytes / 1024).toFixed(1);
+        const saved   = Math.max(0, Math.round((1 - bytes / uploadedFile.size) * 100));
+
+        compInfo.innerHTML = `${targetW} × ${targetH} px &nbsp;|&nbsp; ${sizeKB} KB<br>💾 ${saved}% size reduced`;
+
+        downloadBtn.style.display = "block";
+        previewSection.style.display = "block";
+
+    }, 250);
+}
+
+function downloadImage() {
+    if (!compressedDataUrl) return;
+    const ext = formatSelect.value.split("/")[1];
+    const a = document.createElement("a");
+    a.href = compressedDataUrl;
+    a.download = "techpatraa-compressed." + ext;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
