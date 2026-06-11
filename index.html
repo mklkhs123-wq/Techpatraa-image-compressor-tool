@@ -1,247 +1,466 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Pro Image Compressor Tool - TechPatraa</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e2e8f0;min-height:100vh}
+*{box-sizing:border-box;margin:0;padding:0;}
 
-.page{padding:16px;max-width:660px;margin:0 auto}
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    min-height:100vh;
+    padding:15px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
 
-.ad-slot{width:100%;height:90px;background:linear-gradient(135deg,#0f1629,#131d35);border:1px dashed #2a3a5c;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#3a5080;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px}
+.container{
+    width:100%;
+    max-width:860px;
+    padding:22px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff;
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
 
-.card{background:linear-gradient(145deg,#111827,#0d1424);border:1px solid #1e2d4a;border-radius:18px;padding:28px;box-shadow:0 8px 32px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05)}
+h2{font-size:20px;margin-bottom:16px;text-align:center;}
 
-.logo-row{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.logo-text{font-size:20px;font-weight:700;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{font-size:12px;color:#4b6080;margin-bottom:22px;margin-left:46px}
+/* Drop Box */
+.drop-box{
+    border:2px dashed #00e5ff;
+    padding:28px 15px;
+    border-radius:12px;
+    text-align:center;
+    cursor:pointer;
+    transition:background 0.2s;
+    -webkit-tap-highlight-color:transparent;
+}
+.drop-box:active{background:rgba(0,229,255,0.1);}
+.drop-box .icon{font-size:32px;display:block;margin-bottom:6px;}
+.drop-box small{color:rgba(255,255,255,0.6);font-size:13px;}
 
-.upload-zone{border:2px dashed #1e3a5f;border-radius:14px;padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.25s;background:rgba(30,58,95,0.08);position:relative}
-.upload-zone:hover{border-color:#3b82f6;background:rgba(59,130,246,0.06)}
-.upload-zone .icon{font-size:32px;margin-bottom:8px}
-.upload-zone p{color:#64748b;font-size:14px}
-.upload-zone strong{color:#94a3b8;font-size:12px}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+/* Controls */
+.controls{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;}
 
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.field-label{font-size:11px;color:#4b6080;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px}
-select{width:100%;background:#0d1424;color:#cbd5e1;border:1px solid #1e3058;border-radius:10px;padding:10px 14px;font-size:14px;font-family:'Inter',sans-serif;appearance:none;cursor:pointer;outline:none;transition:border-color 0.2s}
-select:hover,select:focus{border-color:#3b82f6}
-.quality-row{display:flex;align-items:center;gap:10px}
-.quality-row input[type=range]{flex:1;accent-color:#3b82f6}
-.quality-val{font-size:13px;font-weight:600;color:#60a5fa;min-width:32px;text-align:right}
+.ctrl-box{
+    flex:1;
+    min-width:200px;
+    background:rgba(255,255,255,0.06);
+    border-radius:12px;
+    padding:12px 14px;
+}
+.ctrl-box label{
+    display:block;
+    font-size:13px;
+    color:rgba(255,255,255,0.7);
+    margin-bottom:8px;
+}
 
-.btn-convert{width:100%;margin-top:16px;padding:14px 24px;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;
-  background:linear-gradient(180deg,#3b82f6 0%,#2563eb 60%,#1d4ed8 100%);
-  color:white;
-  box-shadow:0 6px 0 #1a3ea0,0 8px 20px rgba(37,99,235,0.35);
-  transform:translateY(0);
-  transition:transform 0.1s,box-shadow 0.1s}
-.btn-convert:hover{background:linear-gradient(180deg,#60a5fa 0%,#3b82f6 60%,#2563eb 100%)}
-.btn-convert:active{transform:translateY(4px);box-shadow:0 2px 0 #1a3ea0,0 4px 10px rgba(37,99,235,0.2)}
-.btn-convert:disabled{background:linear-gradient(180deg,#2a3a5c,#1e2d4a);box-shadow:0 4px 0 #111827;cursor:not-allowed;color:#4b6080}
+/* Slider */
+input[type=range]{
+    width:100%;
+    accent-color:#00e5ff;
+    cursor:pointer;
+    height:6px;
+}
+input[type=range]::-webkit-slider-thumb{
+    width:22px;height:22px;
+}
+.slider-val{
+    text-align:right;
+    font-size:13px;
+    font-weight:bold;
+    color:#00e5ff;
+    margin-top:5px;
+}
 
-.progress-wrap{margin-top:16px;display:none}
-.progress-track{background:#0d1424;border:1px solid #1e2d4a;border-radius:20px;height:10px;overflow:hidden}
-.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:20px;transition:width 0.1s linear;box-shadow:0 0 8px rgba(59,130,246,0.5)}
-.progress-row{display:flex;justify-content:space-between;margin-top:6px}
-.progress-txt{font-size:11px;color:#4b6080}
-.progress-pct{font-size:11px;color:#3b82f6;font-weight:600}
+/* Format select */
+select{
+    width:100%;
+    padding:10px;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.08);
+    color:#fff;
+    font-size:14px;
+    outline:none;
+    cursor:pointer;
+}
+select option{background:#1a2a3a;color:#fff;}
 
-.status{text-align:center;font-size:13px;font-weight:600;min-height:20px;margin:10px 0 0}
-.status.ok{color:#34d399}.status.busy{color:#fbbf24}.status.idle{color:#4b6080}
+/* Size row */
+.size-row{display:flex;align-items:center;gap:10px;margin-top:4px;}
+.size-row>div{flex:1;}
+.size-row input[type=number]{
+    width:100%;
+    padding:9px;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.08);
+    color:#fff;
+    text-align:center;
+    font-size:14px;
+    outline:none;
+}
+.size-row input[type=number]::placeholder{color:rgba(255,255,255,0.3);}
+.size-row small{display:block;text-align:center;font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.lock-icon{font-size:20px;text-align:center;color:rgba(255,255,255,0.35);padding-top:6px;}
 
-.divider{border:none;border-top:1px solid #1a2540;margin:18px 0}
+/* Compress button */
+.btn-compress{
+    display:block;
+    width:100%;
+    margin-top:18px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#00e5ff,#0077ff);
+    color:#fff;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity 0.2s;
+}
+.btn-compress:active{opacity:0.8;}
 
-.info-row{display:flex;gap:8px;margin-top:14px}
-.info-badge{flex:1;background:#0d1424;border:1px solid #1a2540;border-radius:10px;padding:10px;text-align:center}
-.info-badge .val{font-size:16px;font-weight:700;color:#60a5fa}
-.info-badge .lbl{font-size:10px;color:#4b6080;margin-top:2px;text-transform:uppercase;letter-spacing:0.6px}
+/* Progress */
+.progress-box{display:none;margin-top:14px;}
+.progress-track{
+    background:rgba(255,255,255,0.12);
+    border-radius:20px;
+    height:12px;
+    overflow:hidden;
+}
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#00e5ff,#0077ff);
+    border-radius:20px;
+    transition:width 0.08s linear;
+}
+.status-text{
+    text-align:center;
+    margin-top:7px;
+    font-size:13px;
+    font-weight:bold;
+    color:#00e5ff;
+}
 
-.preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.preview-card{background:#0a0e1a;border:1px solid #1a2540;border-radius:12px;overflow:hidden}
-.preview-header{padding:8px 12px;border-bottom:1px solid #1a2540;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:#4b6080;display:flex;justify-content:space-between;align-items:center}
-.preview-header span.tag{background:#1e2d4a;color:#60a5fa;font-size:10px;padding:2px 7px;border-radius:20px}
-.preview-body{padding:10px;min-height:90px;display:flex;align-items:center;justify-content:center}
-.preview-body img{width:100%;border-radius:8px;display:none}
-.preview-empty{color:#2a3a5c;font-size:12px;text-align:center}
+/* Ad slot */
+.ad-slot{
+    margin-top:16px;
+    padding:10px 0;
+    text-align:center;
+    min-height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
 
-.btn-download{width:100%;margin-top:14px;padding:14px 24px;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:none;
-  background:linear-gradient(180deg,#10b981 0%,#059669 60%,#047857 100%);
-  color:white;
-  box-shadow:0 6px 0 #064e3b,0 8px 20px rgba(5,150,105,0.35);
-  transform:translateY(0);
-  transition:transform 0.1s,box-shadow 0.1s}
-.btn-download:hover{background:linear-gradient(180deg,#34d399 0%,#10b981 60%,#059669 100%)}
-.btn-download:active{transform:translateY(4px);box-shadow:0 2px 0 #064e3b}
+/* Preview */
+.preview-section{display:none;margin-top:20px;}
+.preview-section h3{
+    font-size:15px;
+    color:rgba(255,255,255,0.7);
+    margin-bottom:12px;
+    text-align:center;
+}
+.preview-row{display:flex;gap:14px;flex-wrap:wrap;}
+.preview-card{
+    flex:1;
+    min-width:200px;
+    background:rgba(255,255,255,0.06);
+    border-radius:12px;
+    padding:12px;
+    text-align:center;
+}
+.preview-card p{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:8px;}
+.preview-card img{
+    width:100%;
+    border-radius:8px;
+    max-height:220px;
+    object-fit:contain;
+    background:rgba(0,0,0,0.2);
+    display:block;
+}
+.size-info{
+    margin-top:8px;
+    font-size:12px;
+    color:rgba(255,255,255,0.5);
+    line-height:1.7;
+}
+
+/* Download */
+.btn-download{
+    display:none;
+    width:100%;
+    margin-top:12px;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#00c853,#009624);
+    color:#fff;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity 0.2s;
+}
+.btn-download:active{opacity:0.8;}
+
+@media(max-width:580px){
+    .container{padding:12px;}
+    .ctrl-box{min-width:100%;}
+    .preview-row{flex-direction:column;}
+    .preview-card{min-width:100%;}
+    h2{font-size:17px;}
+    .btn-compress{font-size:14px;padding:13px;}
+}
 </style>
+</head>
+<body>
+<div class="container">
 
-<div class="page">
+    <h2>🚀 Pro Image Compressor Studio</h2>
 
-  <div class="ad-slot">Advertisement · 728×90</div>
-
-  <div class="card">
-    <div class="logo-row">
-      <div class="logo-icon">🖼</div>
-      <div class="logo-text">ImgConvert Pro</div>
+    <!-- Upload -->
+    <div class="drop-box" id="dropBox">
+        <span class="icon">📂</span>
+        <strong>Tap / Click to Upload Image</strong>
+        <br><small>Supports JPG, PNG, WebP</small>
     </div>
-    <div class="subtitle">Fast · Free · No Watermark</div>
+    <input type="file" id="fileInput" accept="image/*" style="display:none">
 
-    <div class="upload-zone" id="dropZone">
-      <div class="icon">⬆</div>
-      <p id="dropText">Click or drag an image here</p>
-      <strong>Supports JPG, PNG, WEBP, GIF, BMP</strong>
-      <input type="file" id="fileInput" accept="image/*">
-    </div>
+    <!-- Controls -->
+    <div class="controls">
 
-    <div class="row2">
-      <div>
-        <div class="field-label">Output Format</div>
-        <select id="format" onchange="onFormatChange()">
-          <option value="image/jpeg">JPG — Smaller size</option>
-          <option value="image/png">PNG — Lossless</option>
-          <option value="image/webp">WEBP — Best ratio</option>
-        </select>
-      </div>
-      <div>
-        <div class="field-label">Quality</div>
-        <div class="quality-row">
-          <input type="range" id="quality" min="10" max="100" value="90" step="5" oninput="document.getElementById('qVal').innerText=this.value+'%'">
-          <span class="quality-val" id="qVal">90%</span>
+        <div class="ctrl-box">
+            <label>Quality — <span id="qualityVal" style="color:#00e5ff;font-weight:bold;">70%</span></label>
+            <input type="range" id="qualitySlider" min="10" max="100" value="70">
         </div>
-      </div>
-    </div>
 
-    <button class="btn-convert" id="convertBtn" onclick="startConversion()">⚡ Convert Image</button>
-
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="progress-row">
-        <span class="progress-txt" id="progressTxt">Initialising...</span>
-        <span class="progress-pct" id="progressPct">0%</span>
-      </div>
-    </div>
-
-    <div class="status idle" id="status">Upload an image to get started</div>
-
-    <div class="info-row" id="infoRow" style="display:none">
-      <div class="info-badge"><div class="val" id="origSize">—</div><div class="lbl">Original</div></div>
-      <div class="info-badge"><div class="val" id="convSize">—</div><div class="lbl">Converted</div></div>
-      <div class="info-badge"><div class="val" id="savingPct">—</div><div class="lbl">Saved</div></div>
-    </div>
-
-    <hr class="divider">
-
-    <div class="preview-grid">
-      <div class="preview-card">
-        <div class="preview-header">Original <span class="tag" id="origTag">—</span></div>
-        <div class="preview-body">
-          <img id="originalPreview">
-          <div class="preview-empty" id="emptyOrig">No image</div>
+        <div class="ctrl-box">
+            <label>Output Format</label>
+            <select id="formatSelect">
+                <option value="image/jpeg">JPG</option>
+                <option value="image/png">PNG</option>
+                <option value="image/webp">WEBP</option>
+            </select>
         </div>
-      </div>
-      <div class="preview-card">
-        <div class="preview-header">Converted <span class="tag" id="convTag">—</span></div>
-        <div class="preview-body">
-          <img id="resultPreview">
-          <div class="preview-empty" id="emptyConv">Not converted yet</div>
+
+        <div class="ctrl-box">
+            <label>Resize (px) — optional</label>
+            <div class="size-row">
+                <div>
+                    <input type="number" id="widthInput" placeholder="Width">
+                    <small>Width</small>
+                </div>
+                <div class="lock-icon">🔗</div>
+                <div>
+                    <input type="number" id="heightInput" placeholder="Height">
+                    <small>Height</small>
+                </div>
+            </div>
         </div>
-      </div>
+
     </div>
 
-    <button class="btn-download" id="downloadBtn" onclick="downloadImg()">⬇ Download Converted Image</button>
-  </div>
+    <!-- Compress button -->
+    <button class="btn-compress" onclick="compressImage()">⚡ Compress Image</button>
+
+    <!-- Progress -->
+    <div class="progress-box" id="progressBox">
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="status-text" id="statusText">Processing 0%</p>
+    </div>
+
+    <!-- Ad Slot -->
+    <div class="ad-slot">
+        <script>
+          atOptions = {
+            'key' : '40481fbfeb3ccbe3f4d81eba78ba36e8',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/40481fbfeb3ccbe3f4d81eba78ba36e8/invoke.js"></script>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-section" id="previewSection">
+        <h3>📸 Before / After</h3>
+        <div class="preview-row">
+
+            <div class="preview-card">
+                <p>Original</p>
+                <img id="originalImg" src="" alt="original">
+                <div class="size-info" id="origInfo"></div>
+            </div>
+
+            <div class="preview-card">
+                <p>Compressed</p>
+                <img id="compressedImg" src="" alt="compressed">
+                <div class="size-info" id="compInfo"></div>
+                <button class="btn-download" id="downloadBtn" onclick="downloadImage()">⬇️ Download Image</button>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
+<canvas id="canvas" style="display:none"></canvas>
+
 <script>
-const fileInput=document.getElementById('fileInput');
-const originalPreview=document.getElementById('originalPreview');
-const resultPreview=document.getElementById('resultPreview');
-const statusEl=document.getElementById('status');
-const convertBtn=document.getElementById('convertBtn');
-const downloadBtn=document.getElementById('downloadBtn');
-const progressWrap=document.getElementById('progressWrap');
-const progressFill=document.getElementById('progressFill');
-const progressTxt=document.getElementById('progressTxt');
-const progressPct=document.getElementById('progressPct');
-let resultData='';let origFileSize=0;
-const steps=['Reading file...','Decoding pixels...','Applying conversion...','Optimising output...','Finalising...'];
+let uploadedFile = null;
+let loadedImage  = null;
+let compressedDataUrl = null;
 
-fileInput.onchange=(e)=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  origFileSize=file.size;
-  originalPreview.src=URL.createObjectURL(file);
-  originalPreview.style.display='block';
-  document.getElementById('emptyOrig').style.display='none';
-  document.getElementById('origTag').innerText=file.name.split('.').pop().toUpperCase();
-  setStatus('Ready — '+file.name,'idle');
-  resetResult();
-};
+const fileInput      = document.getElementById("fileInput");
+const dropBox        = document.getElementById("dropBox");
+const qualitySlider  = document.getElementById("qualitySlider");
+const qualityVal     = document.getElementById("qualityVal");
+const formatSelect   = document.getElementById("formatSelect");
+const widthInput     = document.getElementById("widthInput");
+const heightInput    = document.getElementById("heightInput");
+const progressBox    = document.getElementById("progressBox");
+const progressFill   = document.getElementById("progressFill");
+const statusText     = document.getElementById("statusText");
+const previewSection = document.getElementById("previewSection");
+const originalImg    = document.getElementById("originalImg");
+const compressedImg  = document.getElementById("compressedImg");
+const origInfo       = document.getElementById("origInfo");
+const compInfo       = document.getElementById("compInfo");
+const downloadBtn    = document.getElementById("downloadBtn");
+const canvas         = document.getElementById("canvas");
+const ctx            = canvas.getContext("2d");
 
-function onFormatChange(){
-  resetResult();
-  if(fileInput.files[0]) setStatus('Format changed — click Convert again','idle');
+// Upload
+dropBox.addEventListener("click", () => fileInput.click());
+dropBox.addEventListener("touchend", e => { e.preventDefault(); fileInput.click(); });
+
+// Quality slider
+qualitySlider.addEventListener("input", () => {
+    qualityVal.textContent = qualitySlider.value + "%";
+});
+
+// Aspect ratio lock
+widthInput.addEventListener("input", () => {
+    if (loadedImage && widthInput.value) {
+        heightInput.value = Math.round(widthInput.value * (loadedImage.height / loadedImage.width));
+    }
+});
+heightInput.addEventListener("input", () => {
+    if (loadedImage && heightInput.value) {
+        widthInput.value = Math.round(heightInput.value * (loadedImage.width / loadedImage.height));
+    }
+});
+
+// File selected
+fileInput.addEventListener("change", function(e) {
+    const f = e.target.files[0];
+    if (!f) return;
+    uploadedFile = f;
+
+    compressedImg.src = "";
+    downloadBtn.style.display = "none";
+    progressBox.style.display = "none";
+    compInfo.textContent = "";
+    compressedDataUrl = null;
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        loadedImage = new Image();
+        loadedImage.onload = function() {
+            originalImg.src = ev.target.result;
+            widthInput.placeholder  = loadedImage.width;
+            heightInput.placeholder = loadedImage.height;
+            origInfo.innerHTML = `${loadedImage.width} × ${loadedImage.height} px &nbsp;|&nbsp; ${(f.size/1024).toFixed(1)} KB`;
+            previewSection.style.display = "block";
+        };
+        loadedImage.src = ev.target.result;
+    };
+    reader.readAsDataURL(f);
+});
+
+function compressImage() {
+    if (!uploadedFile || !loadedImage) {
+        alert("Pehle image upload karein! 📂");
+        return;
+    }
+
+    // Reset
+    compressedImg.src = "";
+    downloadBtn.style.display = "none";
+    compInfo.textContent = "";
+    compressedDataUrl = null;
+    progressBox.style.display = "block";
+    progressFill.style.width = "0%";
+    statusText.textContent = "Processing 0%";
+
+    const quality  = qualitySlider.value / 100;
+    const format   = formatSelect.value;
+    const targetW  = parseInt(widthInput.value)  || loadedImage.width;
+    const targetH  = parseInt(heightInput.value) || loadedImage.height;
+
+    // Progress animation 0→85
+    let prog = 0;
+    const timer = setInterval(() => {
+        prog += 5;
+        if (prog > 85) { clearInterval(timer); return; }
+        progressFill.style.width = prog + "%";
+        statusText.textContent = "Processing " + prog + "%";
+    }, 40);
+
+    setTimeout(() => {
+        canvas.width  = targetW;
+        canvas.height = targetH;
+        ctx.clearRect(0, 0, targetW, targetH);
+        ctx.drawImage(loadedImage, 0, 0, targetW, targetH);
+
+        compressedDataUrl = canvas.toDataURL(format, quality);
+
+        clearInterval(timer);
+        progressFill.style.width = "100%";
+        statusText.textContent = "✅ Compression Done!";
+
+        compressedImg.src = compressedDataUrl;
+
+        const bytes   = Math.round((compressedDataUrl.length * 3) / 4);
+        const sizeKB  = (bytes / 1024).toFixed(1);
+        const saved   = Math.max(0, Math.round((1 - bytes / uploadedFile.size) * 100));
+
+        compInfo.innerHTML = `${targetW} × ${targetH} px &nbsp;|&nbsp; ${sizeKB} KB<br>💾 ${saved}% size reduced`;
+
+        downloadBtn.style.display = "block";
+        previewSection.style.display = "block";
+
+    }, 250);
 }
 
-function resetResult(){
-  resultPreview.style.display='none';resultPreview.src='';
-  document.getElementById('emptyConv').style.display='block';
-  downloadBtn.style.display='none';
-  progressWrap.style.display='none';progressFill.style.width='0%';
-  document.getElementById('infoRow').style.display='none';
-  document.getElementById('convTag').innerText='—';
-  resultData='';
-}
-
-function setStatus(msg,type){statusEl.innerText=msg;statusEl.className='status '+(type||'idle');}
-
-async function startConversion(){
-  if(!fileInput.files[0])return alert('Pehle image select karo!');
-  convertBtn.disabled=true;downloadBtn.style.display='none';
-  resultPreview.style.display='none';document.getElementById('emptyConv').style.display='block';
-  document.getElementById('infoRow').style.display='none';
-  progressWrap.style.display='block';progressFill.style.width='0%';
-  setStatus('Converting...','busy');
-  let pct=0;let step=0;
-  const iv=setInterval(()=>{
-    pct+=Math.random()*10+3;
-    if(pct>=88){pct=88;clearInterval(iv);}
-    progressFill.style.width=Math.min(pct,88)+'%';
-    progressPct.innerText=Math.round(Math.min(pct,88))+'%';
-    const s=Math.floor(pct/18);
-    if(s!==step&&s<steps.length){step=s;progressTxt.innerText=steps[step];}
-  },90);
-  const canvas=document.createElement('canvas');
-  const ctx=canvas.getContext('2d');
-  const img=new Image();img.src=originalPreview.src;
-  await new Promise(r=>img.onload=r);
-  canvas.width=img.width;canvas.height=img.height;ctx.drawImage(img,0,0);
-  const fmt=document.getElementById('format').value;
-  const q=parseInt(document.getElementById('quality').value)/100;
-  setTimeout(()=>{
-    clearInterval(iv);progressFill.style.width='100%';progressPct.innerText='100%';progressTxt.innerText='Done!';
-    setTimeout(()=>{
-      resultData=canvas.toDataURL(fmt,q);
-      resultPreview.src=resultData;resultPreview.style.display='block';
-      document.getElementById('emptyConv').style.display='none';
-      document.getElementById('convTag').innerText=fmt.split('/')[1].toUpperCase();
-      const cb=Math.round((resultData.length*3)/4);
-      const sv=Math.max(0,Math.round((1-cb/origFileSize)*100));
-      document.getElementById('origSize').innerText=fmtSize(origFileSize);
-      document.getElementById('convSize').innerText=fmtSize(cb);
-      document.getElementById('savingPct').innerText=(sv>0?'-':'')+sv+'%';
-      document.getElementById('infoRow').style.display='flex';
-      progressWrap.style.display='none';
-      setStatus('Conversion successful!','ok');
-      convertBtn.disabled=false;downloadBtn.style.display='block';
-    },350);
-  },1400);
-}
-
-function fmtSize(b){return b>1048576?(b/1048576).toFixed(1)+'MB':(b/1024).toFixed(0)+'KB';}
-
-function downloadImg(){
-  const a=document.createElement('a');a.href=resultData;
-  a.download='converted.'+document.getElementById('format').value.split('/')[1];a.click();
+function downloadImage() {
+    if (!compressedDataUrl) return;
+    const ext = formatSelect.value.split("/")[1];
+    const a = document.createElement("a");
+    a.href = compressedDataUrl;
+    a.download = "techpatraa-compressed." + ext;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 </script>
+</body>
+</html>
